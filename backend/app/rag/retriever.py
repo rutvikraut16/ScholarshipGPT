@@ -10,7 +10,19 @@ def retrieve_documents(query, top_k=5):
         top_k=top_k
     )
 
-    return results
+    documents = results["documents"][0]
+    metadatas = results["metadatas"][0]
+
+    sources = []
+
+    for meta in metadatas:
+        if meta and "source" in meta:
+            sources.append(meta["source"])
+
+    return {
+        "documents": documents,
+        "sources": list(set(sources))
+    }
 
 
 if __name__ == "__main__":
@@ -27,22 +39,12 @@ if __name__ == "__main__":
     print("\nTOP RESULTS\n")
     print("=" * 60)
 
-    documents = results["documents"][0]
-    metadatas = results["metadatas"][0]
+    documents = results["documents"]
+    sources = results["sources"]
 
     for i, doc in enumerate(documents):
 
         print(f"\nResult {i + 1}")
-
-        source = "Unknown Source"
-
-        if metadatas[i] is not None:
-            source = metadatas[i].get(
-                "source",
-                "Unknown Source"
-            )
-
-        print(f"Source: {source}")
 
         print(
             f"Content:\n"
@@ -50,3 +52,8 @@ if __name__ == "__main__":
         )
 
         print("-" * 60)
+
+    print("\nSOURCES USED:\n")
+
+    for source in sources:
+        print(f"📄 {source}")

@@ -8,17 +8,14 @@ class ChatService:
 
         self.gemini = GeminiService()
 
-    def ask(
-        self,
-        question
-    ):
+    def ask(self, question):
 
         results = retrieve_documents(
             question,
             top_k=5
         )
 
-        documents = results["documents"][0]
+        documents = results["documents"]
 
         context = "\n\n".join(
             documents
@@ -29,4 +26,7 @@ class ChatService:
             context
         )
 
-        return answer
+        return {
+            "answer": answer,
+            "sources": results["sources"]
+        }

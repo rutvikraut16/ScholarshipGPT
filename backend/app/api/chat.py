@@ -1,4 +1,5 @@
 from fastapi import APIRouter
+from datetime import datetime
 
 from app.models.chat import (
     ChatRequest,
@@ -22,10 +23,14 @@ def chat(
     request: ChatRequest
 ):
 
-    answer = chat_service.ask(
+    result = chat_service.ask(
         request.question
     )
 
     return ChatResponse(
-        answer=answer
+        answer=result["answer"],
+        sources=result["sources"],
+        timestamp=datetime.now().strftime(
+       "%d-%m-%Y %H:%M"
+    )
     )

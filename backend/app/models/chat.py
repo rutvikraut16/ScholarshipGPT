@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from typing import List
 
 
 class ChatRequest(BaseModel):
@@ -7,3 +8,5 @@ class ChatRequest(BaseModel):
 
 class ChatResponse(BaseModel):
     answer: str
+    sources: List[str]
+    timestamp: str
